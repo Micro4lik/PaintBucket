@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class RiddleGenerator : Singleton<RiddleGenerator>
 {
@@ -11,15 +13,26 @@ public class RiddleGenerator : Singleton<RiddleGenerator>
 
     [SerializeField]
     private GridLayoutGroup _riddleGrid;
+    [SerializeField]
+    private List<Bucket> _bucketsLibrary = new List<Bucket>();
 
     public Dictionary<int, Color32> ColorPalette = new Dictionary<int, Color32>();
+
+    public UnityAction<RiddleInfo> onRiddleGenerated;
 
     // Start is called before the first frame update
     void Start()
     {
-        GenerateColors(5);
-        CreateEmptyBase(new Vector2Int(5, 5));
     }
+
+    public void GenerateRiddle()
+    {
+        GenerateColors(5);
+        var riddle = CreateEmptyBase(new Vector2Int(5, 5));
+        PopulateBaseWithBuckets(riddle);
+        onRiddleGenerated(riddle);
+    }
+
 
     private void GenerateColors(int colorsAmount=3)
     {
@@ -40,14 +53,34 @@ public class RiddleGenerator : Singleton<RiddleGenerator>
         
     }
 
-    public void CreateEmptyBase(Vector2Int size)
+    public RiddleInfo CreateEmptyBase(Vector2Int size)
     {
-        for (int i = 0; i < size.x*size.y; i++)
+        var _riddle = new RiddleInfo();
+        _riddle.riddleBounds = size;
+
+        for (int i = 0; i < size.y; i++)
         {
-            var _tile = Instantiate(_emptyCell, _riddleGrid.transform);
-            var _cellGraphic = _tile.GetComponentInChildren<CellGraphic>();
-            _cellGraphic.SetColor(ColorPalette[UnityEngine.Random.Range(0, ColorPalette.Count)]);
-            
+            for (int j = 0; j < size.x; j++)
+            {
+                var _tile = Instantiate(_emptyCell, _riddleGrid.transform);
+                var _cell = _tile.GetComponentInChildren<Cell>();
+                _cell.coordinates = new Vector2Int(j, i);
+                _tile.name = $"Cell {j}x{i}";
+                var _cellGraphic = _tile.GetComponentInChildren<CellGraphic>();
+                _riddle.riddleCells.Add(_cell);
+            }
+        }
+        return _riddle;
+    }
+    private void PopulateBaseWithBuckets(RiddleInfo riddle)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            var randomCell = riddle.riddleCells[Random.Range(0, riddle.riddleCells.Count)];
+            var _bucket = _bucketsLibrary[Random.Range(0, _bucketsLibrary.Count)];
+            _bucket.paintColor = ColorPalette[Random.Range(0, ColorPalette.Count)];
+            randomCell.SetInteractable(_bucket);
         }
     }
 }
+

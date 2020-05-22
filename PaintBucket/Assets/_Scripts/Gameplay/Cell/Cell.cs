@@ -8,18 +8,25 @@ public class Cell : SerializedMonoBehaviour
     [HideInInspector]
     public Vector2Int coordinates;
     public CellGraphic cellGraphic;
+    public CellType cellType;
+
+    [SerializeField]
+    public Bucket bucketInCell { get; private set; }
 
 
-
-    // Start is called before the first frame update
-    void Start()
+    public void SetInteractable(Bucket _bucketType)
     {
-        
+        bucketInCell = _bucketType;
+        bucketInCell.cell = this;
+        cellGraphic.button.onClick.AddListener(delegate { bucketInCell.OnPress(); });
+        cellGraphic.SetColor(bucketInCell.paintColor);
+        cellType = CellType.Interactable;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
+}
+public enum CellType
+{
+    Empty = 0, //Unknown type
+    Paintable = 1, //Available to be colored
+    Interactable = 2, //Can be pressed (huiyovina)
 }
