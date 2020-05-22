@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bucket :  IInteractable
+public abstract class Bucket : SerializedMonoBehaviour,  IInteractable
 {
     public Cell cell=null;
     public Color32 paintColor;
