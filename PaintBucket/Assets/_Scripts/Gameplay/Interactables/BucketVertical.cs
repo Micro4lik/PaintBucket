@@ -5,8 +5,12 @@ using UnityEngine;
 
 public class BucketVertical : Bucket
 {
-    public BucketVertical(Bucket bucket) : base(bucket)
+    /*public BucketVertical(Bucket bucket) : base(bucket)
     {
+    }*/
+    public BucketVertical(Cell cell, Color32 paintColor) : base(cell, paintColor)
+    {
+
     }
 
     public override void OnPress()
@@ -16,17 +20,5 @@ public class BucketVertical : Bucket
         {
             cell.cellGraphic.SetColor(paintColor);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

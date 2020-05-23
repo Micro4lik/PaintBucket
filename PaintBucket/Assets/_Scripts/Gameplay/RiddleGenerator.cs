@@ -80,28 +80,17 @@ public class RiddleGenerator : Singleton<RiddleGenerator>
     public GameObject test;
     private void PopulateBaseWithBuckets(RiddleInfo riddle)
     {
-        /*var randomCell = riddle.riddleCells[Random.Range(0, riddle.riddleCells.Count)];
-        var _bucket = _bucketsLibrary[Random.Range(0, _bucketsLibrary.Count)];
-        _bucket.paintColor = ColorPalette[Random.Range(0, ColorPalette.Count)];
-        randomCell.SetInteractable(_bucket);*/
-
-        /*for (int i = 0; i < 3; i++) // just genarate bucket of horizontal type, work fine
-        {
-            var randomCell = riddle.riddleCells[Random.Range(0, riddle.riddleCells.Count)];
-            var _bucket = gameObject.AddComponent(typeof(BucketHorizontal)) as Bucket;
-            _bucket.paintColor = ColorPalette[Random.Range(0, ColorPalette.Count)];
-            randomCell.SetInteractable(_bucket);
-        }*/
-
         for (int i = 0; i < 3; i++)
         {
             var randomCell = riddle.riddleCells[Random.Range(0, riddle.riddleCells.Count)];
             var randomColor = ColorPalette[Random.Range(0, ColorPalette.Count)];
 
-            //NewBucket.Create(randomCell, ColorPalette[Random.Range(0, ColorPalette.Count)], "FirstBucket");
-            NewBucket.CreateBucketHorizontal(gameObject, randomCell, randomColor, "HorizontalBucket"); // TODO: change horizontal bucket to bucket
+            var _bucket = Bucket.Create(Bucket.BucketType.Horizontal, randomCell, randomColor);
 
-            //randomCell.SetInteractable(_bucket);
+            _bucket.paintColor = ColorPalette[Random.Range(0, ColorPalette.Count)];
+            randomCell.SetInteractable(_bucket);
+
+            _bucketsLibrary.Add(_bucket);
         }
 
     }

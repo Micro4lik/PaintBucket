@@ -11,9 +11,11 @@ public class Cell : SerializedMonoBehaviour
     public CellType cellType;
 
     [SerializeField]
+    //public Bucket bucketInCell { get; private set; }
     public Bucket bucketInCell { get; private set; }
 
 
+    //public void SetInteractable(Bucket _bucketType)
     public void SetInteractable(Bucket _bucketType)
     {
         bucketInCell = _bucketType;
